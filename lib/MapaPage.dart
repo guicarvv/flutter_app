@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'MenuPage.dart';
+import 'ReservaEvento.dart';
+import 'PalestrasPage.dart';
+import 'MapaPage.dart'; // Pode parecer redundante, mas necessário para navegação condicional
 
 class MapaPage extends StatefulWidget {
   const MapaPage({super.key});
@@ -9,6 +13,7 @@ class MapaPage extends StatefulWidget {
 
 class _MapaPageState extends State<MapaPage> {
   String? temaSelecionado;
+  int _selectedIndex = 3; // Mapa é o 4º item (índice 3)
 
   final Map<String, Map<String, dynamic>> temas = {
     'Tecnologia': {
@@ -36,6 +41,36 @@ class _MapaPageState extends State<MapaPage> {
       'salas': ['30', '31', '32', '33', '35']
     },
   };
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    switch (index) {
+      case 0:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const MenuPage()),
+        );
+        break;
+      case 1:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const PalestrasPage()),
+        );
+        break;
+      case 2:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const ReservarEventoPage()),
+        );
+        break;
+      case 3:
+        // Já está na MapaPage
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,19 +103,19 @@ class _MapaPageState extends State<MapaPage> {
               mainAxisSpacing: 10,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              childAspectRatio: 3.5, // 🔧 Mais estreito e pequeno
+              childAspectRatio: 3.5,
               children: temas.entries.map((entry) {
                 final nome = entry.key;
                 final cor = entry.value['cor'] as Color;
 
                 return SizedBox(
-                  height: 35, // 📏 Altura pequena dos botões
+                  height: 35,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: cor,
                       foregroundColor: Colors.black,
                       padding: const EdgeInsets.symmetric(horizontal: 8),
-                      textStyle: const TextStyle(fontSize: 12), // 🔠 Fonte menor
+                      textStyle: const TextStyle(fontSize: 12),
                     ),
                     onPressed: () {
                       setState(() {
@@ -101,6 +136,32 @@ class _MapaPageState extends State<MapaPage> {
               ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        backgroundColor: Colors.pink[100],
+        selectedItemColor: Colors.pink[700],
+        unselectedItemColor: Colors.pink[400],
+        type: BottomNavigationBarType.fixed,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Menu',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.mic),
+            label: 'Palestras',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.event_seat),
+            label: 'Assento',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.map),
+            label: 'Mapa',
+          ),
+        ],
       ),
     );
   }

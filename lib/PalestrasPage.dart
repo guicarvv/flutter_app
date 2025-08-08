@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'DetalhesPalestraPage.dart';  // Vamos criar essa página nova!
+import 'DetalhesPalestraPage.dart';
 
 class PalestrasPage extends StatelessWidget {
   const PalestrasPage({super.key});
@@ -56,6 +56,23 @@ class PalestrasPage extends StatelessWidget {
             ),
           );
         },
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 2, // Índice da aba atual (Palestras)
+        onTap: (index) {
+          if (index == 0) {
+            Navigator.pushReplacementNamed(context, '/menu');
+          } else if (index == 1) {
+            Navigator.pushReplacementNamed(context, '/mapa');
+          } else if (index == 2) {
+            // já está na página atual
+          }
+        },
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Menu'),
+          BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Mapa'),
+          BottomNavigationBarItem(icon: Icon(Icons.mic), label: 'Palestras'),
+        ],
       ),
     );
   }

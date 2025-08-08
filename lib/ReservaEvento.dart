@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'MenuPage.dart';
+import 'PalestrasPage.dart';
+import 'MapaPage.dart';
+import 'ReservaEvento.dart'; // Opcional, pois já estamos nela
 
 class ReservarEventoPage extends StatefulWidget {
   const ReservarEventoPage({super.key});
@@ -8,12 +12,13 @@ class ReservarEventoPage extends StatefulWidget {
 }
 
 class _ReservarEventoPageState extends State<ReservarEventoPage> {
-  // Lista de evnentos com cadeiras disponíveis e reservadas
   final List<Map<String, dynamic>> eventos = [
     {'nome': 'Show de Rock', 'cadeirasDisponiveis': 20, 'reservadas': 0},
     {'nome': 'Palestra de Tecnologia', 'cadeirasDisponiveis': 15, 'reservadas': 0},
     {'nome': 'Peça de Teatro', 'cadeirasDisponiveis': 10, 'reservadas': 0},
   ];
+
+  int _selectedIndex = 2; // Assento é o 3º item
 
   void reservarCadeira(int index) {
     setState(() {
@@ -43,6 +48,36 @@ class _ReservarEventoPageState extends State<ReservarEventoPage> {
         );
       }
     });
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    switch (index) {
+      case 0:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const MenuPage()),
+        );
+        break;
+      case 1:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const PalestrasPage()),
+        );
+        break;
+      case 2:
+        // Já está na tela
+        break;
+      case 3:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const MapaPage()),
+        );
+        break;
+    }
   }
 
   @override
@@ -84,6 +119,32 @@ class _ReservarEventoPageState extends State<ReservarEventoPage> {
             ),
           );
         },
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        backgroundColor: Colors.pink[100],
+        selectedItemColor: Colors.pink[700],
+        unselectedItemColor: Colors.pink[400],
+        type: BottomNavigationBarType.fixed,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Menu',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.mic),
+            label: 'Palestras',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.event_seat),
+            label: 'Assento',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.map),
+            label: 'Mapa',
+          ),
+        ],
       ),
     );
   }
