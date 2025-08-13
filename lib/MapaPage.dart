@@ -63,7 +63,7 @@ class _MapaPageState extends State<MapaPage> {
       case 2:
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const ReservarEventoPage()),
+          MaterialPageRoute(builder: (context) => const ReservaEventoPage()),
         );
         break;
       case 3:

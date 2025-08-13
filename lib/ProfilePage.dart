@@ -1,121 +1,71 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/ReservaEvento.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'ReservaEvento.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  // Foto do perfil (inicialmente será uma imagem padrão)
-  String _profileImage = 'https://www.example.com/default-profile.png';
-
-  // Dados do usuário editáveis
-  String _userName = "João Silva";
-  String _userEmail = "joao.silva@email.com";
-
-  // Controladores para os TextFields de edição
-  late TextEditingController _nameController;
-  late TextEditingController _emailController;
-
-  // Controle de modo edição
-  bool _isEditing = false;
+  List<String> reservas = [];
 
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: _userName);
-    _emailController = TextEditingController(text: _userEmail);
+    _carregarReservas();
   }
 
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    super.dispose();
+  Future<void> _carregarReservas() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      reservas = prefs.getStringList('palestrasReservadas') ?? [];
+    });
   }
 
-  // Função para alternar modo edição
-  void _toggleEdit() {
-    if (_isEditing) {
-      // Salvar alterações
-      setState(() {
-        _userName = _nameController.text.trim();
-        _userEmail = _emailController.text.trim();
-      });
+  void _abrirReserva() async {
+    final mudou = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const ReservaEventoPage()),
+    );
+
+    if (mudou == true) {
+      _carregarReservas(); // Atualiza quando volta
     }
-    setState(() {
-      _isEditing = !_isEditing;
-    });
-  }
-
-  // Função para alterar a foto de perfil (simulada)
-  void _changeProfilePicture() {
-    if (!_isEditing) return; // Só permite trocar foto no modo edição
-    setState(() {
-      // Aqui você pode abrir galeria, câmera etc. 
-      // Por simplicidade, só alterna entre duas imagens fixas:
-      _profileImage = _profileImage == 'https://www.example.com/default-profile.png'
-          ? 'https://www.example.com/new-profile.png'
-          : 'https://www.example.com/default-profile.png';
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Perfil'),
-        actions: [
-          IconButton(
-            icon: Icon(_isEditing ? Icons.check : Icons.edit),
-            tooltip: _isEditing ? 'Salvar' : 'Editar Perfil',
-            onPressed: _toggleEdit,
-          ),
-        ],
-      ),
+      appBar: AppBar(title: Text("Meu Perfil")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            GestureDetector(
-              onTap: _changeProfilePicture,
-              child: CircleAvatar(
-                radius: 50,
-                backgroundImage: NetworkImage(_profileImage),
+            Text("Minhas Reservas:",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            reservas.isEmpty
+                ? Text("Nenhuma reserva feita ainda.")
+                : Column(
+                    children: reservas
+                        .map((reserva) => ListTile(
+                              title: Text(reserva),
+                              leading: Icon(Icons.event),
+                            ))
+                        .toList(),
+                  ),
+            const Spacer(),
+            Center(
+              child: ElevatedButton(
+                onPressed: _abrirReserva,
+                child: Text("Reservar Novo Evento"),
               ),
             ),
-            const SizedBox(height: 20),
-
-            _isEditing
-                ? TextField(
-                    controller: _nameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Nome',
-                      border: OutlineInputBorder(),
-                    ),
-                  )
-                : ListTile(
-                    title: const Text('Nome'),
-                    subtitle: Text(_userName),
-                  ),
-
-            const SizedBox(height: 10),
-
-            _isEditing
-                ? TextField(
-                    controller: _emailController,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                      border: OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.emailAddress,
-                  )
-                : ListTile(
-                    title: const Text('Email'),
-                    subtitle: Text(_userEmail),
-                  ),
           ],
         ),
       ),

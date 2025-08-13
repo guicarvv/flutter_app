@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/ReservaEvento.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'ProfilePage.dart';
 import 'ReservaEvento.dart';
-import 'LoginPage.dart';
 import 'PalestrasPage.dart';
 import 'SalasPage.dart';
 import 'MapaPage.dart';
+import 'LoginPage.dart';
+import 'dart:async';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -15,6 +18,22 @@ class MenuPage extends StatefulWidget {
 
 class _MenuPageState extends State<MenuPage> {
   int _selectedIndex = 0;
+  List<Map<String, String>> palestrasReservadas = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _carregarReservas();
+    _verificarPalestrasProximas();
+  }
+
+  Future<void> _carregarReservas() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> reservasJson = prefs.getStringList('palestrasReservadas') ?? [];
+    setState(() {
+      palestrasReservadas = reservasJson.map((e) => {"nome": e}).toList();
+    });
+  }
 
   void _logout(BuildContext context) {
     Navigator.pushReplacement(
@@ -23,41 +42,56 @@ class _MenuPageState extends State<MenuPage> {
     );
   }
 
-  void _openProfile(BuildContext context) {
-    Navigator.push(
+  void _openProfile(BuildContext context) async {
+    await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const ProfilePage()),
     );
+    _carregarReservas();
   }
 
-  // Função para lidar com os cliques nos ícones da barra inferior
-  void _onItemTapped(int index) {
+  void _onItemTapped(int index) async {
     setState(() {
       _selectedIndex = index;
     });
 
     switch (index) {
-      case 0: // Voltar ao Menu (já está na tela atual)
+      case 0:
         break;
       case 1:
-        Navigator.push(
+        await Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const PalestrasPage()),
         );
         break;
       case 2:
-        Navigator.push(
+        await Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const ReservarEventoPage()),
+          MaterialPageRoute(builder: (context) => const ReservaEventoPage()),
         );
+        _carregarReservas();
         break;
       case 3:
-        Navigator.push(
+        await Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const MapaPage()),
         );
         break;
     }
+  }
+
+  void _verificarPalestrasProximas() {
+    // Simulação: a cada 10s verifica se alguma palestra começa
+    Timer.periodic(const Duration(seconds: 10), (timer) async {
+      if (palestrasReservadas.isEmpty) return;
+
+      // Aqui você pode implementar a verificação real com hora atual
+      // Exemplo fixo:
+      final nome = palestrasReservadas.first['nome']!;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Atenção! Faltam 5 minutos para '$nome'")),
+      );
+    });
   }
 
   @override
@@ -85,19 +119,20 @@ class _MenuPageState extends State<MenuPage> {
             ElevatedButton.icon(
               icon: const Icon(Icons.event_seat),
               label: const Text('Reservar Evento'),
-              onPressed: () {
-                Navigator.push(
+              onPressed: () async {
+                await Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const ReservarEventoPage()),
+                  MaterialPageRoute(builder: (context) => const ReservaEventoPage()),
                 );
+                _carregarReservas();
               },
             ),
             const SizedBox(height: 10),
             ElevatedButton.icon(
               icon: const Icon(Icons.mic),
               label: const Text('Palestras (Auditório)'),
-              onPressed: () {
-                Navigator.push(
+              onPressed: () async {
+                await Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const PalestrasPage()),
                 );
@@ -138,7 +173,7 @@ class _MenuPageState extends State<MenuPage> {
                 suffixIcon: const Icon(Icons.search),
               ),
               onSubmitted: (value) {
-                // TODO: Implementar busca de eventos
+                // TODO: implementar busca de eventos
               },
             ),
           ],
