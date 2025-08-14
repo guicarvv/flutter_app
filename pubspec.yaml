@@ -23,4 +23,6 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/user.png
+
     - assets/mapa.png

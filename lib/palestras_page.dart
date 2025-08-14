@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'DetalhesPalestraPage.dart';
+import 'detalhes_palestra_page.dart';
 
 class PalestrasPage extends StatelessWidget {
   const PalestrasPage({super.key});

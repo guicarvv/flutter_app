@@ -61,12 +61,12 @@ class DetalhesPalestraPage extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text('Reservar Palestra'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.deepPurple,
                 padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                 textStyle: const TextStyle(fontSize: 18),
               ),
+              child: const Text('Reservar Palestra'),
             ),
           ],
         ),

@@ -24,22 +24,25 @@ class _ReservaEventoPageState extends State<ReservaEventoPage> {
       palestrasReservadas.add(nomePalestra);
       await prefs.setStringList('palestrasReservadas', palestrasReservadas);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Reserva confirmada para $nomePalestra!')),
-      );
-
-      Navigator.pop(context, true); // Retorna para o perfil informando que mudou
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Reserva confirmada para $nomePalestra!')),
+        );
+        Navigator.pop(context, true);
+      }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Você já reservou esta palestra!')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Você já reservou esta palestra!')),
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Reservar Evento")),
+      appBar: AppBar(title: const Text("Reservar Evento")),
       body: ListView.builder(
         itemCount: palestras.length,
         itemBuilder: (context, index) {
@@ -47,7 +50,7 @@ class _ReservaEventoPageState extends State<ReservaEventoPage> {
             title: Text(palestras[index]),
             trailing: ElevatedButton(
               onPressed: () => reservarPalestra(palestras[index]),
-              child: Text("Reservar"),
+              child: const Text("Reservar"),
             ),
           );
         },

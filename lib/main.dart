@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'LoginPage.dart'; // Importe a página de login
-import 'MenuPage.dart'; // Importe a página de menu que queremos navegar após o login
+import 'login_page.dart'; // Importe a página de login
+import 'menu_page.dart'; // Importe a página de menu que queremos navegar após o login
 
 void main() {
   runApp(const MyApp());

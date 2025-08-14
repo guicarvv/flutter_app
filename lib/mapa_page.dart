@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'MenuPage.dart';
-import 'ReservaEvento.dart';
-import 'PalestrasPage.dart';
-import 'MapaPage.dart'; // Pode parecer redundante, mas necessário para navegação condicional
+import 'menu_page.dart';
+import 'reserva_evento.dart';
+import 'palestras_page.dart';
 
 class MapaPage extends StatefulWidget {
   const MapaPage({super.key});
