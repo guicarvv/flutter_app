@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
               // Ícone do usuário
               CircleAvatar(
                 radius: 60,
-                backgroundColor: rosaPrincipal.withOpacity(0.1),
+                backgroundColor: rosaPrincipal.withValues(alpha: 0.1),
                 child: Icon(
                   userIcon,
                   size: 60,

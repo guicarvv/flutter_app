@@ -106,11 +106,8 @@ class _MenuPageState extends State<MenuPage> {
             },
           ),
         ),
-        title: Center(
-          child: CircleAvatar(
-            radius: 20,
-            backgroundImage: AssetImage('assets/imagens/logo.png'),
-          ),
+        title: const Center(
+          child: Icon(Icons.event, color: Colors.white, size: 30),
         ),
         actions: [
           IconButton(
@@ -178,12 +175,9 @@ class _MenuPageState extends State<MenuPage> {
           children: [
             DrawerHeader(
               decoration: BoxDecoration(color: rosaPrincipal),
-              child: Align(
+              child: const Align(
                 alignment: Alignment.bottomLeft,
-                child: CircleAvatar(
-                  radius: 30,
-                  backgroundImage: AssetImage('assets/imagens/logo.png'),
-                ),
+                child: Icon(Icons.event, color: Colors.white, size: 60),
               ),
             ),
             _drawerItem(Icons.home, 'Inicio', () {}),

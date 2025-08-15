@@ -1,49 +1,68 @@
 import 'package:flutter/material.dart';
 import 'detalhes_palestra_page.dart';
 
-class PalestrasPage extends StatelessWidget {
+class PalestrasPage extends StatefulWidget {
   const PalestrasPage({super.key});
 
-  final List<Map<String, String>> palestras = const [
+  @override
+  State<PalestrasPage> createState() => _PalestrasPageState();
+}
+
+class _PalestrasPageState extends State<PalestrasPage> {
+  final List<Map<String, String>> palestras = [
     {
-      'nome': 'Palestra sobre Inteligência Artificial',
-      'descricao': 'Uma análise detalhada das tendências em IA e suas aplicações.',
-      'apresentador': 'Dr. João Silva',
+      'nome': 'Inteligência Artificial no Futuro',
+      'data': '15/11/2024',
       'horaInicio': '09:00',
       'horaFim': '10:30',
-      'data': '15/08/2025',
+      'apresentador': 'Dr. João Silva',
+      'descricao': 'Uma visão abrangente sobre o futuro da IA e seu impacto na sociedade.',
     },
     {
-      'nome': 'Educação Financeira para Jovens',
-      'descricao': 'Dicas práticas para organizar suas finanças desde cedo.',
-      'apresentador': 'Maria Oliveira',
+      'nome': 'Sustentabilidade e Tecnologia',
+      'data': '15/11/2024',
       'horaInicio': '11:00',
-      'horaFim': '12:00',
-      'data': '15/08/2025',
+      'horaFim': '12:30',
+      'apresentador': 'Dra. Maria Santos',
+      'descricao': 'Como a tecnologia pode contribuir para um mundo mais sustentável.',
     },
     {
-      'nome': 'Desenvolvimento Pessoal',
-      'descricao': 'Como melhorar suas habilidades pessoais e profissionais.',
-      'apresentador': 'Carlos Pereira',
+      'nome': 'Inovação em Educação',
+      'data': '16/11/2024',
       'horaInicio': '14:00',
       'horaFim': '15:30',
-      'data': '15/08/2025',
+      'apresentador': 'Prof. Carlos Lima',
+      'descricao': 'Novas metodologias e tecnologias aplicadas à educação.',
     },
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Palestras (Auditório)')),
+      appBar: AppBar(
+        title: const Text('Palestras'),
+        backgroundColor: const Color(0xFFFB0268),
+      ),
       body: ListView.builder(
+        padding: const EdgeInsets.all(16),
         itemCount: palestras.length,
         itemBuilder: (context, index) {
           final palestra = palestras[index];
           return Card(
-            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            margin: const EdgeInsets.only(bottom: 16),
             child: ListTile(
-              title: Text(palestra['nome']!),
-              subtitle: Text('Apresentador: ${palestra['apresentador']}'),
+              title: Text(
+                palestra['nome']!,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Data: ${palestra['data']}'),
+                  Text('Horário: ${palestra['horaInicio']} - ${palestra['horaFim']}'),
+                  Text('Apresentador: ${palestra['apresentador']}'),
+                ],
+              ),
               trailing: const Icon(Icons.arrow_forward_ios),
               onTap: () {
                 Navigator.push(
@@ -56,23 +75,6 @@ class PalestrasPage extends StatelessWidget {
             ),
           );
         },
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 2, // Índice da aba atual (Palestras)
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.pushReplacementNamed(context, '/menu');
-          } else if (index == 1) {
-            Navigator.pushReplacementNamed(context, '/mapa');
-          } else if (index == 2) {
-            // já está na página atual
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Menu'),
-          BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Mapa'),
-          BottomNavigationBarItem(icon: Icon(Icons.mic), label: 'Palestras'),
-        ],
       ),
     );
   }
